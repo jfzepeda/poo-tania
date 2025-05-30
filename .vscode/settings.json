@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "string": "cpp",
+        "__bit_reference": "cpp",
+        "deque": "cpp",
+        "complex": "cpp",
+        "ostream": "cpp",
+        "__locale": "cpp",
+        "iostream": "cpp"
+    }
+}
