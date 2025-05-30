@@ -1,8 +1,8 @@
 //
 //  main.cpp
-//  poo_codes_TC1030
+//  diagnostico
 //
-//  Created by Juan Felipe Zepeda on 15/05/25.
+//  Created by Juan Felipe Zepeda on 16/05/25.
 //
 
 #include <iostream>
