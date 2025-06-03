@@ -16,6 +16,8 @@ int main() {
     // insert code here...
     apuntadores_enteros();
     apuntadores_array();
+    apuntadores_funciones();
+    apuntadores_cambio();
     cout << "Hello, World!\n";
     return 0;
 }

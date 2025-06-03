@@ -11,3 +11,7 @@
 Circulo::Circulo(int X, int Y, int R):Shape(X, Y) {
     r = R;
 }
+
+string Circulo::draw() {
+    return "soy un circulo";
+}

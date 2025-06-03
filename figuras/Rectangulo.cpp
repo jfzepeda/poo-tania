@@ -16,3 +16,7 @@ Rectangulo::Rectangulo(int X, int Y, int B, int H):Shape(X, Y) {
 int Rectangulo::getArea() {
     return b*h;
 };
+
+string Rectangulo::draw() {
+    return "soy un rectangulo";
+}

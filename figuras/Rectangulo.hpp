@@ -15,4 +15,5 @@ private:
 public:
     Rectangulo(int, int, int, int);
     int getArea();
+    string draw() override;
 };

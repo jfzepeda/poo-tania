@@ -20,7 +20,7 @@ private:
     int y;
     
 public:
-    string draw();
+    virtual string draw();
     Shape(int, int);
     int getX();
     int getY();

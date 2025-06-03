@@ -13,4 +13,5 @@ private:
     
 public:
     Circulo(int, int, int);
+    string draw() override;
 };

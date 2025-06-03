@@ -17,4 +17,5 @@ public:
     Poligono(int, int, int, int, int);
     int getArea();
     int getLados();
+    string draw() override;
 };

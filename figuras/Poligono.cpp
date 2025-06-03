@@ -21,3 +21,7 @@ int Poligono::getLados() {
 int Poligono::getArea() {
     return l*b*a/2;
 };
+
+string Poligono::draw() {
+    return "soy un poligono";
+}
