@@ -4,7 +4,7 @@ using namespace std;
 
 class Envio {
 protected:
-    double costoEstandar = 10.0;
+    double costoEstandar = 100;
     string nombreR, estadoR, nombreD, estadoD, direccionR, codigoPostalR, direccionD, codigoPostalD, ciudadR, ciudadD;
 
 public:
@@ -34,11 +34,14 @@ private:
     double largo, ancho, profundidad, peso, costoPerKg;
 
 public:
-    Paquete( double _largo, double _ancho, double _profundidad, double _peso, double _costoPerKg,
+    Paquete( 
         string _nR, string _dR, string _cR, string _eR, string _cpR,
-        string _nD, string _dD, string _cD, string _eD, string _cpD
+        string _nD, string _dD, string _cD, string _eD, string _cpD,
+        double _largo, double _ancho, double _profundidad, double _peso, double _costoPerKg = 20
     ) 
-        : Envio(_nR, _dR, _cR, _eR, _cpR, _nD, _dD, _cD, _eD, _cpD) {
+    : Envio(_nR, _dR, _cR, _eR, _cpR, 
+            _nD, _dD, _cD, _eD, _cpD
+    ) {
         largo = _largo;
         ancho = _ancho;
         profundidad = _profundidad;
@@ -49,22 +52,22 @@ public:
     double calculaCosto() const override {
         return costoEstandar + (peso * costoPerKg);
     }
-
 };
 
 class Sobre : public Envio {
 private:
-    double largo, ancho;
-    double costoExtra;
+    double largo, ancho, costoExtra;
 
 public:
-    Sobre( double _largo, double _ancho,
+    Sobre( 
         string _nR, string _dR, string _cR, string _eR, string _cpR,
-        string _nD, string _dD, string _cD, string _eD, string _cpD
+        string _nD, string _dD, string _cD, string _eD, string _cpD,
+        double _largo, double _ancho, double _costoExtra = 30
     ) 
         : Envio(_nR, _dR, _cR, _eR, _cpR, _nD, _dD, _cD, _eD, _cpD) {
         largo = _largo;
         ancho = _ancho;
+        costoExtra = _costoExtra;
     }
 
     void normalizar() {
