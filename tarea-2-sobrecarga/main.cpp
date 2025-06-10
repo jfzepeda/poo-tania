@@ -13,7 +13,7 @@
 #include <string>
 using namespace std;
 
-int main(int argc, const char * argv[]) {
+int main() {
     // -------------------------------
     // Sección de pruebas para la clase Conversor
     // Realiza conversiones de temperatura, longitud y tiempo
