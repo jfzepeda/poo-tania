@@ -76,7 +76,7 @@ private:
     double comisionPorVenta;
     
 public:
-    EmpleadoPorComision(int _ventasRealizadas, int _comisionPorVenta, string _nombre, int _edad) 
+    EmpleadoPorComision(int _ventasRealizadas, double _comisionPorVenta, string _nombre, int _edad) 
     : Empleado(_nombre, _edad
     ) {
         ventasRealizadas = _ventasRealizadas;

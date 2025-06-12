@@ -1,11 +1,13 @@
 {
-    "files.associations": {
-        "string": "cpp",
-        "__bit_reference": "cpp",
-        "deque": "cpp",
-        "complex": "cpp",
-        "ostream": "cpp",
-        "__locale": "cpp",
-        "iostream": "cpp"
-    }
+  "files.associations": {
+    "string": "cpp",
+    "__bit_reference": "cpp",
+    "deque": "cpp",
+    "complex": "cpp",
+    "ostream": "cpp",
+    "__locale": "cpp",
+    "iostream": "cpp",
+    "fstream": "cpp",
+    "__node_handle": "cpp"
+  }
 }
