@@ -6,6 +6,9 @@
 using namespace std;
 using json = nlohmann::json;
 
+// Librería de uso y documentacion de los JSON obtenida del 
+// repositorio -> https://github.com/nlohmann/json
+
 bool escribirJson(int id, float calificacion) {
     try {
         json j;
@@ -13,7 +16,10 @@ bool escribirJson(int id, float calificacion) {
         // Leer el archivo existente
         ifstream inFile("calificaciones.json");
         if (inFile.is_open()) {
-            inFile >> j;
+            // Sólo parsear si el archivo no está vacío
+            if (inFile.peek() != std::ifstream::traits_type::eof()) {
+                inFile >> j;
+            }
             inFile.close();
         }
 
@@ -37,7 +43,6 @@ bool escribirJson(int id, float calificacion) {
     }
 }
 
-
 float leerJson(int id) {
     try {
         ifstream archivo("calificaciones.json");
@@ -45,9 +50,20 @@ float leerJson(int id) {
             cerr << "No se pudo abrir el archivo." << endl;
             return -1;
         }
+        // Si el archivo está vacío, no hay calificaciones aún
+        if (archivo.peek() == std::ifstream::traits_type::eof()) {
+            archivo.close();
+            return 0;
+        }
 
         json j;
-        archivo >> j;
+        try {
+            archivo >> j;
+        } catch (const json::parse_error& e) {
+            cerr << "Error al parsear JSON: " << e.what() << endl;
+            archivo.close();
+            return 0;
+        }
         archivo.close();
 
         string key = to_string(id);
@@ -69,14 +85,18 @@ float leerJson(int id) {
     }
 }
 
+void print(string s) {
+    cout << s << endl;
+}
+
 class Contenido {
+private:
+    float calificacion; 
 protected:
-    // ID, un nombre, una duración y un género 
     int id;
     string nombre;
     int duracion; 
     string genero;
-    float calificacion; 
 
 public: 
     Contenido(int _id, string _nombre, int _duracion, string _genero) {
@@ -87,13 +107,7 @@ public:
         calificacion = leerJson(id);
     }
 
-    void mostrar() {
-        cout << "ID: " << id << endl;
-        cout << "Nombre: " << nombre << endl;
-        cout << "Duración: " << duracion << " minutos" << endl;
-        cout << "Género: " << genero << endl;
-        cout << "Calificación: " << calificacion << "/10" << endl;
-    }
+    void virtual mostrar() const = 0;
 
     void mostrarCalificacion(bool actualizado = false) {
         if (actualizado) {
@@ -113,14 +127,81 @@ public:
     }
 };
 
+class Pelicula : public Contenido {
+public:
+    Pelicula(int _id, string _nombre, int _duracion, string _genero)
+        : Contenido(_id, _nombre, _duracion, _genero) {
+    }
+
+    void mostrar() const override {
+        cout << "\nPelícula: " << nombre << endl;
+        cout << "Duración: " << duracion << " minutos" << endl;
+        cout << "Género: " << genero << endl;
+        cout << "ID: " << id << endl;
+    }
+};
+
+class Episodio {
+protected:
+    string titulo;
+    int temporada;
+
+public:
+    Episodio(string _titulo, int _temporada) {
+        titulo = _titulo;
+        temporada = _temporada;
+    }
+
+    void imprimir() {
+        cout << "T-" << temporada << " : " << titulo << endl;
+    }
+};
+
+class Serie : public Contenido {
+protected:
+    Episodio* episodios[12]; // Suponiendo un máximo de 10 episodios
+    int n = 0;
+
+public:
+    Serie(int _id, string _nombre, int _duracion, string _genero)
+        : Contenido(_id, _nombre, _duracion, _genero) {
+    }
+
+    int calcularTemporada() {
+        return n / (n - (n%4));
+    };
+
+    void agregarEpisodio(string _titulo) {
+        if (n < 12) {
+            episodios[n] = new Episodio(_titulo, calcularTemporada());
+            n++;
+        } else {
+            cout << "No se pueden agregar más episodios." << endl;
+        }
+    }
+
+    void mostrar() const override {
+        print("\nSerie (" + to_string(id) + ") :" + nombre);
+        cout << "Duración: " << (duracion * n) << " minutos" << endl;
+        cout << "Género: " << genero << endl;
+    }
+};
+
 
 
 int main() {
-    Contenido contenido(1, "Película de Prueba", 120, "Acción");
-    contenido.mostrar();
+    Pelicula peli1(1, "Película de Prueba", 120, "Acción");
+    peli1.mostrarCalificacion();
     float nuevaCalificacion;
     cout << "Ingrese una nueva calificación (0-10): ";
     cin >> nuevaCalificacion;
-    contenido.calificar(nuevaCalificacion);
+    peli1.calificar(nuevaCalificacion);
+    
+    Serie serie1(2, "Serie de Prueba", 40, "Drama");
+    serie1.mostrar();
+    float nuevaCalificacion;
+    cout << "Ingrese una nueva calificación (0-10): ";
+    cin >> nuevaCalificacion;
+    serie1.calificar(nuevaCalificacion);
     return 0;
 }
