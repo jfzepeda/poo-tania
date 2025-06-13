@@ -43,7 +43,7 @@ bool escribirJson(int id, float calificacion) {
     }
 }
 
-float leerJson(int id) {
+float leerJson(int id, bool firstGet = false) {
     try {
         ifstream archivo("calificaciones.json");
         if (!archivo.is_open()) {
@@ -67,7 +67,7 @@ float leerJson(int id) {
         archivo.close();
 
         string key = to_string(id);
-        if (!j.contains(key) || !j[key].is_array()) {
+        if ( (!j.contains(key) || !j[key].is_array()) && !firstGet){
             cerr << "No hay calificaciones para el ID proporcionado." << endl;
             return -1;
         }
@@ -104,7 +104,7 @@ public:
         nombre = _nombre;
         duracion = _duracion;
         genero = _genero;
-        calificacion = leerJson(id);
+        calificacion = leerJson(id, true);
     }
 
     void virtual mostrarDetalle() const = 0;
@@ -392,16 +392,5 @@ int main() {
         
     }    
 
-    peli1.mostrarCalificacion();
-    float nuevaCalificacion;
-    cout << "Ingrese una nueva calificación (0-10): ";
-    cin >> nuevaCalificacion;
-    peli1.calificar(nuevaCalificacion);
-
-    serie1.mostrarDetalle();
-    float nuevaCalificacion;
-    cout << "Ingrese una nueva calificación (0-10): ";
-    cin >> nuevaCalificacion;
-    serie1.calificar(nuevaCalificacion);
     return 0;
 }
