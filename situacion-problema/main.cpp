@@ -114,7 +114,7 @@ public:
         if (actualizado) {
             cout << "Calificación actualizada: " << calificacion << endl;
         }
-        cout << "Calificación: " << calificacion << endl;
+        cout << "Calificación media: " << calificacion << endl;
     }
 
     void calificar(float nuevaCalificacion) {
@@ -386,7 +386,7 @@ int main() {
         } else if (opcion == 3) {
             filmoteca.mostrarContenido();
             
-        } else if (opcion == 3) {
+        } else if (opcion == 4) {
             break;
         } else {
             cout << "Opción no válida, intente de nuevo." << endl;
