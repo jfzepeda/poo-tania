@@ -118,7 +118,7 @@ public:
     }
 
     void calificar(float nuevaCalificacion) {
-        if (nuevaCalificacion >= 0 && nuevaCalificacion <= 10) {
+        if (nuevaCalificacion >= 0 && nuevaCalificacion <= 5) {
             escribirJson(id, nuevaCalificacion);
             calificacion = leerJson(id);
             mostrarCalificacion();
@@ -340,12 +340,13 @@ int main() {
             cin >> idPelicula;
             if (idPelicula >= 1 && idPelicula <= 6) {
                 float nuevaCalificacion;
-                cout << "Ingrese una nueva calificación (0-10): ";
+                cout << "Ingrese una nueva calificación (0-5): ";
                 cin >> nuevaCalificacion;
                 if (nuevaCalificacion >= 0 && nuevaCalificacion <= 10) {
                     Pelicula* pelicula = filmoteca.buscarPeli(idPelicula);
                     if (pelicula) {
                         pelicula->calificar(nuevaCalificacion);
+                        pelicula->mostrarDetalle();
                     } else {
                         cout << "Película no encontrada." << endl;
                     }
@@ -364,12 +365,13 @@ int main() {
             cin >> idSerie;
             if (idSerie >= 7 && idSerie <= 10) {
                 float nuevaCalificacion;
-                cout << "Ingrese una nueva calificación (0-10): ";
+                cout << "Ingrese una nueva calificación (0-5): ";
                 cin >> nuevaCalificacion;
                 if (nuevaCalificacion >= 0 && nuevaCalificacion <= 10) {
                     Serie* serie = filmoteca.buscarSerie(idSerie);
                     if (serie) {
                         serie->calificar(nuevaCalificacion);
+                        serie->mostrarDetalle();
                         serie->mostrarEpisodios();
                     } else {
                         cout << "Serie no encontrada." << endl;
