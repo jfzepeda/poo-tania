@@ -39,6 +39,9 @@ int reproducirVideo(int id) {
 
     // Lanza el comando
     int res = std::system(cmd.c_str());
+    // Teclear la barra espaciadora cuando se abra el vídeo
+    std::system("osascript -e 'tell application \"System Events\" to keystroke space'");
+
     if (res != 0) {
         std::cerr << "Error al abrir el vídeo (código " << res << ")\n";
         return 1;
