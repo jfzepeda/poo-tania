@@ -1,13 +1,51 @@
 // === MAIN DE PRUEBA ===
 #include <iostream>
+#include <cstdlib>  
 #include <fstream>
 #include <string>
-#include "json.hpp"
+#include "libs/json.hpp"
 using namespace std;
 using json = nlohmann::json;
 
 // Librería de uso y documentacion de los JSON obtenida del 
 // repositorio -> https://github.com/nlohmann/json
+
+#include <cstdlib>   // para std::system
+#include <iostream>
+
+void print(string s) {
+    cout << s << endl;
+}
+
+int reproducirVideo(int id) {
+    print("\nQuieres ver la pelicula?  SI / NO");
+    string respuesta;
+    cin >> respuesta;
+    if (respuesta != "SI" && respuesta != "si") {
+        cout << "OK" << endl;
+        return 0;
+    }
+
+    // Verifica que el ID sea válido
+    if (id < 1 || id > 2) {
+        cerr << "ID de vídeo inválido. Por ahora solo se acepta 1 y 2\n";
+        return 1;
+    }
+    // Ruta absoluta o relativa al vídeo
+    std::string ruta = "assets/pelicula_" + to_string(id) + ".mov";
+
+    // Construye el comando: open "ruta"
+    std::string cmd = std::string("open \"") + ruta + "\"";
+
+    // Lanza el comando
+    int res = std::system(cmd.c_str());
+    if (res != 0) {
+        std::cerr << "Error al abrir el vídeo (código " << res << ")\n";
+        return 1;
+    }
+
+    return 0;
+}
 
 bool escribirJson(int id, float calificacion) {
     try {
@@ -83,10 +121,6 @@ float leerJson(int id, bool firstGet = false) {
         cerr << "Excepción al leer el archivo: " << e.what() << endl;
         return -1;
     }
-}
-
-void print(string s) {
-    cout << s << endl;
 }
 
 class Contenido {
@@ -347,6 +381,7 @@ int main() {
                     if (pelicula) {
                         pelicula->calificar(nuevaCalificacion);
                         pelicula->mostrarDetalle();
+                        reproducirVideo(idPelicula);
                     } else {
                         cout << "Película no encontrada." << endl;
                     }
