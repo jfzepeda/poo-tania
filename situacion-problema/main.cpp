@@ -107,7 +107,8 @@ public:
         calificacion = leerJson(id);
     }
 
-    void virtual mostrar() const = 0;
+    void virtual mostrarDetalle() const = 0;
+    void virtual mostrarNombre() const = 0;
 
     void mostrarCalificacion(bool actualizado = false) {
         if (actualizado) {
@@ -125,6 +126,10 @@ public:
             cout << "Calificación inválida. Debe estar entre 0 y 10." << endl;
         }
     }
+
+    int getId() const {
+        return id;
+    }
 };
 
 class Pelicula : public Contenido {
@@ -133,11 +138,15 @@ public:
         : Contenido(_id, _nombre, _duracion, _genero) {
     }
 
-    void mostrar() const override {
+    void mostrarDetalle() const override {
         cout << "\nPelícula: " << nombre << endl;
         cout << "Duración: " << duracion << " minutos" << endl;
         cout << "Género: " << genero << endl;
         cout << "ID: " << id << endl;
+    }
+    
+    void mostrarNombre() const override {
+        cout << "Película: " << nombre << endl;
     }
 };
 
@@ -180,10 +189,21 @@ public:
         }
     }
 
-    void mostrar() const override {
+    void mostrarDetalle() const override {
         print("\nSerie (" + to_string(id) + ") :" + nombre);
         cout << "Duración: " << (duracion * n) << " minutos" << endl;
         cout << "Género: " << genero << endl;
+    }
+
+    void mostrarEpisodios() const {
+        cout << "Episodios de la serie " << nombre << ":" << endl;
+        for (int i = 0; i < n; i++) {
+            episodios[i]->imprimir();
+        }
+    }
+
+    void mostrarNombre() const override {
+        cout << "Serie: " << nombre << endl;
     }
 };
 
@@ -212,15 +232,41 @@ public:
         }
     };
 
-    void mostrarContenido() const {
+    void mostrarPeliculas() const {
         cout << "\nPelículas:" << endl;
         for (int i = 0; i < numPeliculas; i++) {
-            peliculas[i]->mostrar();
+            peliculas[i]->mostrarNombre();
         }
+    };
+    
+    void mostrarSeries() const {
         cout << "\nSeries:" << endl;
         for (int i = 0; i < numSeries; i++) {
-            series[i]->mostrar();
+            series[i]->mostrarNombre();
         }
+    };
+
+    void mostrarContenido() const {
+        mostrarPeliculas();
+        mostrarSeries();
+    };
+
+    Pelicula* buscarPeli(int id) const {
+        for (int i = 0; i < numPeliculas; i++) {
+            if (peliculas[i]->getId() == id) {
+                return peliculas[i];
+            }
+        }
+        return nullptr;
+    };
+
+    Serie* buscarSerie(int id) const {
+        for (int i = 0; i < numSeries; i++) {
+            if (series[i]->getId() == id) {
+                return series[i];
+            }
+        }
+        return nullptr;
     };
 
 };
@@ -265,26 +311,79 @@ int main() {
     serie4.agregarEpisodio("Episodio 2");
     serie4.agregarEpisodio("Episodio 3");
 
+    Filmoteca filmoteca;
+    filmoteca.agregarPelicula(&peli1);
+    filmoteca.agregarPelicula(&peli2);
+    filmoteca.agregarPelicula(&peli3);
+    filmoteca.agregarPelicula(&peli4);
+    filmoteca.agregarPelicula(&peli5);
+    filmoteca.agregarPelicula(&peli6);
+    filmoteca.agregarSerie(&serie1);
+    filmoteca.agregarSerie(&serie2);
+    filmoteca.agregarSerie(&serie3);
+    filmoteca.agregarSerie(&serie4);
+
     while (true)
     {
         cout << "\nSeleccione una opción:" << endl;
         cout << "1. Mostrar Películas" << endl;
         cout << "2. Mostrar Series" << endl;
-        cout << "3. Salir" << endl;
+        cout << "3. Mostrar Contenido" << endl;
+        cout << "4. Salir" << endl;
         int opcion;
         cin >> opcion;
 
         if (opcion == 1) {
-            peli1.mostrar();
-            peli2.mostrar();
-            peli3.mostrar();
-            peli4.mostrar();
-            peli5.mostrar();
+            filmoteca.mostrarPeliculas();
+            cout << "\nSeleccione una película para calificar (1-6): ";
+            int idPelicula;
+            cin >> idPelicula;
+            if (idPelicula >= 1 && idPelicula <= 6) {
+                float nuevaCalificacion;
+                cout << "Ingrese una nueva calificación (0-10): ";
+                cin >> nuevaCalificacion;
+                if (nuevaCalificacion >= 0 && nuevaCalificacion <= 10) {
+                    Pelicula* pelicula = filmoteca.buscarPeli(idPelicula);
+                    if (pelicula) {
+                        pelicula->calificar(nuevaCalificacion);
+                    } else {
+                        cout << "Película no encontrada." << endl;
+                    }
+                } else {
+                    cout << "Calificación inválida. Debe estar entre 0 y 10." << endl;
+                }
+            } else {
+                cout << "ID de película no válido." << endl;
+            }
+            
+            
         } else if (opcion == 2) {
-            serie1.mostrar();
-            serie2.mostrar();
-            serie3.mostrar();
-            serie4.mostrar();
+            filmoteca.mostrarSeries();
+            cout << "\nSeleccione una serie para calificar (7-10): ";
+            int idSerie;
+            cin >> idSerie;
+            if (idSerie >= 7 && idSerie <= 10) {
+                float nuevaCalificacion;
+                cout << "Ingrese una nueva calificación (0-10): ";
+                cin >> nuevaCalificacion;
+                if (nuevaCalificacion >= 0 && nuevaCalificacion <= 10) {
+                    Serie* serie = filmoteca.buscarSerie(idSerie);
+                    if (serie) {
+                        serie->calificar(nuevaCalificacion);
+                        serie->mostrarEpisodios();
+                    } else {
+                        cout << "Serie no encontrada." << endl;
+                    }
+                } else {
+                    cout << "Calificación inválida. Debe estar entre 0 y 10." << endl;
+                }
+            } else {
+                cout << "ID de serie no válido." << endl;
+            }
+            
+        } else if (opcion == 3) {
+            filmoteca.mostrarContenido();
+            
         } else if (opcion == 3) {
             break;
         } else {
@@ -299,7 +398,7 @@ int main() {
     cin >> nuevaCalificacion;
     peli1.calificar(nuevaCalificacion);
 
-    serie1.mostrar();
+    serie1.mostrarDetalle();
     float nuevaCalificacion;
     cout << "Ingrese una nueva calificación (0-10): ";
     cin >> nuevaCalificacion;
